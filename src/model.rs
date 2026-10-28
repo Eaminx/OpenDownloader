@@ -459,12 +459,12 @@ pub fn category_of(filename: &str) -> &'static str {    let ext = filename
         .unwrap_or("")
         .to_ascii_lowercase();
     match ext.as_str() {
-        "png" | "jpg" | "jpeg" | "gif" | "webp" | "svg" | "bmp" | "ico" => "Image",
-        "mp3" | "wav" | "flac" | "ogg" | "m4a" => "Music",
-        "mp4" | "mkv" | "avi" | "mov" | "webm" | "ts" | "m4s" => "Video",
-        "pdf" | "doc" | "docx" | "txt" | "epub" => "Document",
-        "zip" | "rar" | "7z" | "tar" | "gz" => "Compressed",
-        "exe" | "msi" => "Apps",
+        "png" | "jpg" | "jpeg" | "gif" | "webp" | "svg" | "bmp" | "ico" | "heic" | "tiff" | "psd" | "raw" | "ai" => "Image",
+        "mp3" | "wav" | "flac" | "ogg" | "m4a" | "aac" | "opus" | "wma" | "alac" | "aiff" | "mid" | "midi" => "Music",
+        "mp4" | "mkv" | "avi" | "mov" | "webm" | "ts" | "m4s" | "flv" | "vob" | "wmv" | "3gp" | "mpg" | "mpeg" | "m2ts" => "Video",
+        "pdf" | "doc" | "docx" | "txt" | "epub" | "xls" | "xlsx" | "ppt" | "pptx" | "csv" | "rtf" | "odt" | "ods" | "odp" | "md" => "Document",
+        "zip" | "rar" | "7z" | "tar" | "gz" | "bz2" | "xz" | "iso" | "dmg" | "tgz" | "zst" | "cab" => "Compressed",
+        "exe" | "msi" | "apk" | "deb" | "rpm" | "appimage" | "pkg" | "jar" | "bat" | "cmd" | "sh" | "ps1" => "Apps",
         _ => "Other",
     }
 }
@@ -642,7 +642,7 @@ pub const APP_NAME: &str = "OpenDownloader";
 /// Config/storage slug: `%APPDATA%/opendownloader` (v0.5+).
 pub const APP_SLUG: &str = "opendownloader";
 /// Previous slug, kept only for one-time migration of existing installs.
-const LEGACY_SLUG: &str = "idm_rust";
+const LEGACY_SLUG: &str = "opendownloader_legacy";
 
 /// App config directory, e.g. `%APPDATA%/opendownloader`.
 pub fn config_dir() -> Option<std::path::PathBuf> {
@@ -817,7 +817,7 @@ pub fn ui_pref_set_str(key: &str, value: &str) {
     }
 }
 
-/// One-time migration from the legacy `idm_rust` config dir: moves
+/// One-time migration from the legacy `opendownloader_legacy` config dir: moves
 /// queue/settings/inbox files so existing installs keep their history.
 /// Safe to call on every startup (no-op once migrated).
 pub fn migrate_config() {
@@ -859,6 +859,56 @@ pub fn relative_time(dt: &chrono::DateTime<chrono::Local>) -> String {
 
 /// Normalize a user-supplied SHA-256 hex string: trim, lowercase, strip
 /// optional `sha256:` prefix. Returns "" when empty.
+/// Normalize a user-supplied checksum hex string (MD5 or SHA-256): trim, lowercase, strip
+/// optional `sha256:` or `md5:` prefix. Returns "" when empty.
+pub fn normalize_hash(s: &str) -> String {
+    let mut t = s.trim().to_lowercase();
+    if let Some(rest) = t.strip_prefix("sha256:") {
+        t = rest.trim().to_string();
+    } else if let Some(rest) = t.strip_prefix("md5:") {
+        t = rest.trim().to_string();
+    }
+    t
+}
+
+/// True when `s` looks like a 32-char hex MD5 digest.
+pub fn is_valid_md5(s: &str) -> bool {
+    let t = normalize_hash(s);
+    t.len() == 32 && t.bytes().all(|b| b.is_ascii_hexdigit())
+}
+
+/// True when `s` is either a valid SHA-256 or MD5 hex digest.
+pub fn is_valid_checksum(s: &str) -> bool {
+    is_valid_sha256(s) || is_valid_md5(s)
+}
+
+/// Detect whether text contains a valid checksum (MD5 or SHA-256).
+pub fn detect_checksum(s: &str) -> Option<String> {
+    let t = normalize_hash(s);
+    if is_valid_checksum(&t) {
+        Some(t)
+    } else {
+        None
+    }
+}
+
+/// Compute the MD5 hex digest of a file (streamed, low memory).
+pub fn md5_of_file(path: &std::path::Path) -> anyhow::Result<String> {
+    use md5::{Digest, Md5};
+    let mut f = std::fs::File::open(path)?;
+    let mut h = Md5::new();
+    let mut buf = [0u8; 64 * 1024];
+    use std::io::Read;
+    loop {
+        let n = f.read(&mut buf)?;
+        if n == 0 {
+            break;
+        }
+        h.update(&buf[..n]);
+    }
+    Ok(format!("{:x}", h.finalize()))
+}
+
 pub fn normalize_sha256(s: &str) -> String {
     let mut t = s.trim().to_lowercase();
     if let Some(rest) = t.strip_prefix("sha256:") {
@@ -987,12 +1037,12 @@ impl FolderRule {
 
 pub fn default_folder_rules() -> Vec<FolderRule> {
     vec![
-        FolderRule { exts: "mp4,mkv,webm,mov,avi".into(), folder: "Video".into() },
-        FolderRule { exts: "mp3,m4a,flac,ogg,wav".into(), folder: "Music".into() },
-        FolderRule { exts: "png,jpg,jpeg,gif,webp,svg".into(), folder: "Image".into() },
-        FolderRule { exts: "pdf,doc,docx,txt,epub".into(), folder: "Document".into() },
-        FolderRule { exts: "zip,rar,7z,tar,gz".into(), folder: "Compressed".into() },
-        FolderRule { exts: "exe,msi".into(), folder: "Apps".into() },
+        FolderRule { exts: "mp4,mkv,webm,mov,avi,flv,vob,wmv,3gp,mpg,mpeg,ts,m2ts".into(), folder: "Video".into() },
+        FolderRule { exts: "mp3,m4a,flac,ogg,wav,aac,opus,wma,alac,aiff".into(), folder: "Music".into() },
+        FolderRule { exts: "png,jpg,jpeg,gif,webp,svg,bmp,ico,heic,tiff".into(), folder: "Image".into() },
+        FolderRule { exts: "pdf,doc,docx,txt,epub,xls,xlsx,ppt,pptx,csv,rtf,odt,md".into(), folder: "Document".into() },
+        FolderRule { exts: "zip,rar,7z,tar,gz,bz2,xz,iso,dmg,tgz,zst".into(), folder: "Compressed".into() },
+        FolderRule { exts: "exe,msi,apk,deb,rpm,appimage,pkg,jar".into(), folder: "Apps".into() },
     ]
 }
 
@@ -1967,6 +2017,20 @@ mod tests {
         assert!(!back.checksum_repaired);
         assert_eq!(back.duration_secs, 0);
         assert_eq!(back.eff_retries(5), 5);
+    }
+
+    #[test]
+    fn md5_and_checksum_helpers() {
+        assert_eq!(normalize_hash("  MD5:5d41402abc4b2a76b9719d911017c592 "), "5d41402abc4b2a76b9719d911017c592");
+        assert!(is_valid_md5("5d41402abc4b2a76b9719d911017c592"));
+        assert!(is_valid_checksum("5d41402abc4b2a76b9719d911017c592"));
+        assert_eq!(detect_checksum("5D41402ABC4B2A76B9719D911017C592"), Some("5d41402abc4b2a76b9719d911017c592".to_string()));
+        assert_eq!(detect_checksum("not-a-hash"), None);
+
+        let p = std::env::temp_dir().join(format!("od_md5_test_{}.bin", std::process::id()));
+        std::fs::write(&p, b"hello").unwrap();
+        assert_eq!(md5_of_file(&p).unwrap(), "5d41402abc4b2a76b9719d911017c592");
+        let _ = std::fs::remove_file(p);
     }
 
     #[test]

@@ -2340,7 +2340,7 @@ impl CraftApp {
             max_concurrent: 3,
         per_host_conns: 0,
             show_complete: true,
-            sounds: false,
+            sounds: true,
             stats_line: String::new(),
             queues: Vec::new(),
             queue_sel: 0,
@@ -3462,8 +3462,14 @@ impl CraftApp {
             return;
         }
         let (tx, rx) = std::sync::mpsc::channel();
+        let exp = expected.clone();
         std::thread::spawn(move || {
-            let _ = tx.send(crate::model::sha256_of_file(&dest));
+            let t = crate::model::normalize_hash(&exp);
+            if t.len() == 32 {
+                let _ = tx.send(crate::model::md5_of_file(&dest));
+            } else {
+                let _ = tx.send(crate::model::sha256_of_file(&dest));
+            }
         });
         self.verify_jobs.push((id, rx));
         self.push_log(format!("Verify #{id}: hashing…"));
@@ -3490,11 +3496,12 @@ impl CraftApp {
             match r {
                 Ok(actual)
                     if actual.eq_ignore_ascii_case(
-                        crate::model::normalize_sha256(&expected).as_str(),
+                        crate::model::normalize_hash(&expected).as_str(),
                     ) =>
                 {
-                    self.push_log(format!("Verify #{id}: OK (SHA-256 matches)."));
-                    notify("OpenDownloader — checksum OK", &format!("#{id} verified"));
+                    let kind = if crate::model::normalize_hash(&expected).len() == 32 { "MD5" } else { "SHA-256" };
+                    self.push_log(format!("Verify #{id}: OK ({kind} matches)."));
+                    notify("OpenDownloader — checksum OK", &format!("#{id} {kind} verified"));
                 }
                 Ok(actual) => {
                     let short = if actual.len() > 16 { &actual[..16] } else { &actual[..] };
@@ -5771,12 +5778,12 @@ fn native_host_key(browser: &str) -> &'static str {
 
 fn legacy_host_key(browser: &str) -> &'static str {
     match browser {
-        "chrome" => r"HKCU\Software\Google\Chrome\NativeMessagingHosts\com.idm_rust",
-        "edge" => r"HKCU\Software\Microsoft\Edge\NativeMessagingHosts\com.idm_rust",
-        "brave" => r"HKCU\Software\BraveSoftware\Brave-Browser\NativeMessagingHosts\com.idm_rust",
-        "opera" => r"HKCU\Software\Opera Software\NativeMessagingHosts\com.idm_rust",
-        "vivaldi" => r"HKCU\Software\Vivaldi\NativeMessagingHosts\com.idm_rust",
-        _ => r"HKCU\Software\Mozilla\NativeMessagingHosts\com.idm_rust",
+        "chrome" => r"HKCU\Software\Google\Chrome\NativeMessagingHosts\com.opendownloader_legacy",
+        "edge" => r"HKCU\Software\Microsoft\Edge\NativeMessagingHosts\com.opendownloader_legacy",
+        "brave" => r"HKCU\Software\BraveSoftware\Brave-Browser\NativeMessagingHosts\com.opendownloader_legacy",
+        "opera" => r"HKCU\Software\Opera Software\NativeMessagingHosts\com.opendownloader_legacy",
+        "vivaldi" => r"HKCU\Software\Vivaldi\NativeMessagingHosts\com.opendownloader_legacy",
+        _ => r"HKCU\Software\Mozilla\NativeMessagingHosts\com.opendownloader_legacy",
     }
 }
 /// IDM-style zero-config: verify the native host is registered to THIS
@@ -9438,6 +9445,9 @@ impl CraftApp {
                         let t = t.trim().to_string();
                         if is_download_url(&t) {
                             self.add_url = t;
+                        } else if let Some(h) = crate::model::detect_checksum(&t) {
+                            self.add_checksum = h;
+                            self.add_adv = true;
                         }
                     }
                 }
@@ -10056,6 +10066,16 @@ impl CraftApp {
                                     self.add_file = filename_from_url(&url);
                                     self.add_url = url;
                                     self.add_focus_req = true;
+                                }
+                                if self.add_checksum.is_empty() {
+                                    if let Ok(mut cb) = arboard::Clipboard::new() {
+                                        if let Ok(text) = cb.get_text() {
+                                            if let Some(h) = crate::model::detect_checksum(&text) {
+                                                self.add_checksum = h;
+                                                self.add_adv = true;
+                                            }
+                                        }
+                                    }
                                 }
                                 self.show_add = true;
                             }

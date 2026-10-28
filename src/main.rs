@@ -57,7 +57,7 @@ fn install_panic_hook() {
 }
 
 fn main() -> eframe::Result<()> {
-    // Migrate legacy `idm_rust` config (queue/settings/inbox) forward.
+    // Migrate legacy `opendownloader_legacy` config (queue/settings/inbox) forward.
     model::migrate_config();
     if let Err(e)=model::secure_config_directory() { eprintln!("Could not protect application state directory: {e}"); }
     install_panic_hook();

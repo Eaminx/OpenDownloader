@@ -124,5 +124,8 @@
   },
   "panelSocialHint": {
     "message": "অ্যাপ এই পোস্টের ভিডিও শব্দসহ নামিয়ে আনে।"
+  },
+  "menuDownloadImage": {
+    "message": "ছবিটি OpenDownloader দিয়ে ডাউনলোড করুন"
   }
 }

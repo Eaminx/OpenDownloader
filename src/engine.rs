@@ -1260,18 +1260,22 @@ fn is_youtube_page(url: &str) -> bool {
 /// Verify a finished file against an expected SHA-256 hex digest.
 /// Returns Ok(()) when no digest was requested.
 pub async fn verify_checksum(path: &PathBuf, expected_hex: &str) -> Result<()> {
-    let t = expected_hex.trim().to_lowercase();
-    let t = t.strip_prefix("sha256:").unwrap_or(&t).trim().to_string();
+    let t = crate::model::normalize_hash(expected_hex);
     if t.is_empty() {
         return Ok(());
     }
-    if t.len() != 64 || !t.bytes().all(|b| b.is_ascii_hexdigit()) {
-        return Err(anyhow!("invalid SHA-256 checksum (want 64 hex chars)"));
-    }
     let p = path.clone();
-    let actual = tokio::task::spawn_blocking(move || crate::model::sha256_of_file(&p))
-        .await
-        .map_err(|e| anyhow!("checksum task: {e}"))??;
+    let actual = if t.len() == 64 && t.bytes().all(|b| b.is_ascii_hexdigit()) {
+        tokio::task::spawn_blocking(move || crate::model::sha256_of_file(&p))
+            .await
+            .map_err(|e| anyhow!("checksum task: {e}"))??
+    } else if t.len() == 32 && t.bytes().all(|b| b.is_ascii_hexdigit()) {
+        tokio::task::spawn_blocking(move || crate::model::md5_of_file(&p))
+            .await
+            .map_err(|e| anyhow!("checksum task: {e}"))??
+    } else {
+        return Err(anyhow!("invalid checksum (want 32 hex chars for MD5 or 64 hex chars for SHA-256)"));
+    };
     if actual != t {
         return Err(anyhow!(
             "checksum mismatch: expected {t}, got {actual}"

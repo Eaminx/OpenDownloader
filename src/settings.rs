@@ -150,7 +150,7 @@ impl Default for Settings {
             ffmpeg_custom_path: String::new(),
             per_host_conns: 0,
             temp_dir: String::new(),
-            sounds: false,
+            sounds: true,
             quota_mb: "0".into(),
             quota_hours: "1".into(),
             subtitles: false,

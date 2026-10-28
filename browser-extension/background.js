@@ -844,6 +844,11 @@ chrome.runtime.onInstalled.addListener((details) => {
     // sites cover the player with their own layers (the click target is not
     // the <video>), so on those the item is on the page menu too.
     chrome.contextMenus.create({
+      id: "download-image",
+      title: msg("menuDownloadImage", "Download image with OpenDownloader"),
+      contexts: ["image"],
+    });
+    chrome.contextMenus.create({
       id: "download-video",
       title: msg("menuDownloadVideo", "Download video with OpenDownloader"),
       contexts: ["video"],
@@ -993,6 +998,14 @@ async function sendAllLinks(tab, selectionOnly) {
 }
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "download-image") {
+    const url = info.srcUrl;
+    if (url && /^https?:\/\//i.test(url)) {
+      markSeen(url, null);
+      sendToHost(url, null, { pageUrl: (tab && tab.url) || null }).then((ok) => { hostOk = ok; setBadge(); });
+    }
+    return;
+  }
   if (info.menuItemId === "download-video" || info.menuItemId === "download-video-page") {
     const fallback = () => {
       const src = /^https?:\/\//i.test(info.srcUrl || "") ? info.srcUrl : null;

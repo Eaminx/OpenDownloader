@@ -124,5 +124,8 @@
   },
   "panelSocialHint": {
     "message": "The app fetches this post's video with its sound."
+  },
+  "menuDownloadImage": {
+    "message": "Download image with OpenDownloader"
   }
 }
