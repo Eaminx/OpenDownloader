@@ -1,52 +1,59 @@
 <div align="center">
 
-<img src="assets/icon.png" alt="OpenDownloader" width="96">
+<img src="assets/icon.png" alt="OpenDownloader" width="100">
 
 # OpenDownloader
 
-**A fast, free download manager — with a browser extension that catches the videos other tools miss.**
+**A fast, modern, and offline-first download manager built in Rust — paired with an intelligent browser extension.**
 
-Multi-connection downloads, a queue and scheduler, YouTube and 1,000+ sites through its own
-yt-dlp, and an extension that works with the app — or on its own.
+Multi-connection dynamic acceleration, automated queue scheduling, YouTube and 1,000+ streaming sites via integrated yt-dlp & FFmpeg, dual MD5/SHA-256 checksum verification, and seamless browser hand-off.
 
-[![Latest release](https://img.shields.io/github/v/release/opendownloader/opendownloader?label=latest&style=flat-square&color=3b82f6)](https://github.com/opendownloader/opendownloader/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/opendownloader/opendownloader/total?style=flat-square&color=22c55e)](https://github.com/opendownloader/opendownloader/releases)
-[![License: MIT](https://img.shields.io/badge/license-MIT-a78bfa?style=flat-square)](LICENSE)
-[![Made with Rust](https://img.shields.io/badge/made%20with-Rust-f97316?style=flat-square&logo=rust&logoColor=white)](https://www.rust-lang.org)
+[![Latest Release](https://img.shields.io/github/v/release/Eaminx/OpenDownloader?style=for-the-badge&color=3b82f6)](https://github.com/Eaminx/OpenDownloader/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-a78bfa?style=for-the-badge)](LICENSE)
+[![Built with Rust](https://img.shields.io/badge/Made%20with-Rust-f97316?style=for-the-badge&logo=rust&logoColor=white)](https://www.rust-lang.org)
+[![Platform: Cross-Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-4ade80?style=for-the-badge)](https://github.com/Eaminx/OpenDownloader/releases)
 
 <br>
 
-[![Download for Windows](https://img.shields.io/badge/Download-Windows-0078D4?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAyNCAyNCc+PHBhdGggZmlsbD0nd2hpdGUnIGQ9J00yIDQuMmw4LjUtMS4ydjguNEgyek0xMS42IDIuOUwyMiAxLjV2OS45SDExLjZ6TTIgMTIuNmg4LjVWMjFMMiAxOS44ek0xMS42IDEyLjZIMjJ2OS45bC0xMC40LTEuNHonLz48L3N2Zz4=)](https://github.com/opendownloader/opendownloader/releases/download/v0.9.10/OpenDownloader-0.9.10-windows-x64-portable.zip)
-&nbsp;
-[![Download for macOS](https://img.shields.io/badge/Download-macOS-111111?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/opendownloader/opendownloader/releases/download/v0.9.10/OpenDownloader-0.9.10-macos-Universal.zip)
-&nbsp;
-[![Download for Linux](https://img.shields.io/badge/Download-Linux-E95420?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/opendownloader/opendownloader/releases/tag/v0.9.10)
-
-[![Chrome / Edge extension](https://img.shields.io/badge/Extension-Chrome%20%2F%20Edge-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/opendownloader/opendownloader/releases/download/v0.9.10/OpenDownloader-Chrome-0.9.10.zip)
-&nbsp;
-[![Firefox extension](https://img.shields.io/badge/Extension-Firefox-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white)](https://github.com/opendownloader/opendownloader/releases/download/v0.9.10/OpenDownloader-Firefox-0.9.10.xpi)
-
-<sub>Windows 10/11 · macOS 12+ (Apple Silicon & Intel) · Linux x86-64 (DEB, RPM, AppImage) · <a href="https://github.com/opendownloader/opendownloader/releases">all releases</a></sub>
-
-<br><br>
-
-<img src="docs/screenshot-main-window.png" alt="OpenDownloader main window with active, paused, finished and failed downloads" width="92%">
+<img src="docs/screenshot-main-window.png" alt="OpenDownloader Main Window" width="92%">
 
 </div>
 
 ---
 
-## ✨ What's new in 0.9.10
+## 💡 About OpenDownloader
 
-- **Google Drive links** download the file itself (big files and Docs/Sheets/Slides exports too).
-- **Archives unpack themselves**: ZIP, RAR (multi-part too) and 7z when they finish, or right-click → Extract.
-- **A smarter video button**: Instagram, TikTok, X and Reddit posts, MP3 audio only, one click in the quality
-  you picked last, right-click "Download video", and a neat round button on YouTube Shorts.
-- **Browser downloads keep their sound**: joined videos are now normal, seekable MP4 files.
-- **A tidier app**: redesigned Site Grabber, header icons, a toolbar that fits narrow windows, and
-  double-click a running download to see its progress window.
+**OpenDownloader** was inspired by an earlier open-source Rust download manager concept whose original repository was untracked/unmaintained. Recognizing the immense potential of a native, lightweight Rust alternative to proprietary tools like Internet Download Manager (IDM), **OpenDownloader** represents an upgraded, modernized, and standalone evolution.
 
-Full notes: [Release 0.9.10](https://github.com/opendownloader/opendownloader/releases/tag/v0.9.10).
+### 🌟 What's New & Upgraded in OpenDownloader
+
+- **Dual Checksum Verification (MD5 + SHA-256):** Complete background streaming checksum verification supporting both 32-character MD5 and 64-character SHA-256 digests.
+- **Smart Clipboard Hash Detection:** Automatically sniffs MD5/SHA-256 hashes from your clipboard when adding or pasting URLs and prepares verification upfront.
+- **Audio Notifications & Chimes:** Integrated out-of-the-box audible feedback on download completion and error.
+- **Modernized Media & Category Auto-Routing:** Expanded auto-categorization covering modern formats (`.heic`, `.flv`, `.m2ts`, `.opus`, `.aac`, `.xlsx`, `.pptx`, `.csv`, `.apk`, `.deb`, `.iso`, `.dmg`, etc.) into dedicated organized subfolders.
+- **Browser Extension Right-Click Context Menus:** Right-click any link, video, or image directly in Chrome, Edge, Brave, or Firefox to download with OpenDownloader (full English & Bengali localization).
+- **Hardened Architecture & Clean Re-Crating:** Standalone reusable engine crate (`crates/opendownloader-engine`), 100% test pass rate across 176 Rust tests and 158 extension tests.
+
+---
+
+## ⚡ Key Highlights
+
+### 🚀 Dynamic Segmentation Engine
+- **Dynamic Work Stealing (1–32 connections):** Idle connections split remaining byte-ranges in real time, preventing slow streams from throttling total transfer speed.
+- **Single Pre-allocated File:** Eliminates the disk-intensive file-stitching phase at the end of downloads.
+- **Crash-Safe Journaling:** Real-time state journaling flushes progress periodically, guaranteeing safe resume without corrupting partially downloaded bytes.
+- **Remote ZIP Preview (`peek`):** Inspect contents of remote `.zip` archives without downloading the entire archive over the wire.
+
+### 🎥 Video & Media Streaming
+- Built-in integration for **yt-dlp** and **FFmpeg** with automatic updates.
+- Supports 1080p, 4K, HLS (m3u8), and DASH streams with separate video and audio stream muxing.
+- Direct downloads for Instagram, TikTok, Reddit, X (Twitter), Facebook, and Vimeo.
+- Direct Google Drive large-file bypass and Docs/Sheets export support.
+
+### 🌐 Browser Extension (Chrome, Edge, Brave, Firefox)
+- **IDM-Style Hand-Off:** Pauses browser downloads, forwards authenticated session cookies, request headers, and proxy configs directly to the app.
+- **On-Player Video Bar:** Floating *Download this video* pill on HTML5 video players with direct resolution and format selection.
+- **Standalone Browser Mode:** Can also capture, mux, and save streams directly inside the browser when running without the desktop app.
 
 ---
 
@@ -56,169 +63,78 @@ Full notes: [Release 0.9.10](https://github.com/opendownloader/opendownloader/re
   <tr>
     <td width="55%" valign="top">
       <img src="docs/screenshot-download-file-info.png" alt="Download File Info dialog">
-      <p><b>Capture a link</b> — the app checks its real name and size before it starts.</p>
+      <p><b>Download Confirmation</b> — Real-time filename, size inspection, category routing, and checksum staging.</p>
     </td>
     <td width="45%" valign="top">
-      <img src="docs/screenshot-progress-window.png" alt="Progress window with eight connections">
-      <p><b>Watch it fly</b> — live speed, time left and every parallel connection.</p>
+      <img src="docs/screenshot-progress-window.png" alt="Progress window">
+      <p><b>Real-Time Progress</b> — Live transfer rate, ETA, dynamic segments, and per-connection status.</p>
     </td>
   </tr>
 </table>
 
 <p align="center">
-  <img src="docs/screenshot-download-all-links.png" alt="Download all links window" width="92%"><br>
-  <b>Download all links</b> — every file on a page with its type and size; check, filter, download.
+  <img src="docs/screenshot-video-bar.jpg" alt="Video Bar" width="92%"><br>
+  <b>Floating Player Bar</b> — One-click download button directly overlaying web video players.
 </p>
 
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <img src="docs/screenshot-extension-popup.png" alt="Extension popup with Download with app and Download in browser sections">
-      <p><b>Extension popup</b> — every video on the page, with the app or in the browser alone.</p>
-    </td>
-    <td width="50%" valign="top">
-      <img src="docs/screenshot-extension-downloads.png" alt="Extension Downloads tab">
-      <p><b>Downloads tab</b> — browser downloads and the app's queue, side by side.</p>
-    </td>
-  </tr>
-</table>
+---
 
-<p align="center">
-  <img src="docs/screenshot-video-bar.jpg" alt="Download this video bar on a playing video" width="92%"><br>
-  <b>On every player</b> — a small <i>Download this video</i> bar, see-through until you need it.
-</p>
+## 📦 Installation & Usage
 
-<table>
-  <tr>
-    <td width="58%" valign="top">
-      <img src="docs/screenshot-settings.png" alt="Settings window, Plugins page">
-      <p><b>Settings</b> — yt-dlp, FFmpeg and the JavaScript runtime install and update themselves.</p>
-    </td>
-    <td width="42%" valign="top">
-      <img src="docs/screenshot-download-complete.png" alt="Download complete dialog">
-      <p><b>Done</b> — open the file, open it with another app, or show its folder.</p>
-    </td>
-  </tr>
-</table>
+### 🪟 Windows (Portable)
+1. Download `OpenDownloader-0.9.10-windows-x64.zip` from [Releases](https://github.com/Eaminx/OpenDownloader/releases).
+2. Extract the archive and launch `opendownloader.exe` — completely portable, no installer required!
+
+### 🧩 Browser Extension Setup
+1. **Chrome / Edge / Brave:**
+   - Open `chrome://extensions` (or `edge://extensions`).
+   - Enable **Developer mode** (top right).
+   - Click **Load unpacked** and select the [`browser-extension`](browser-extension/) directory.
+2. **Firefox:**
+   - Open `about:debugging#/runtime/this-firefox`.
+   - Click **Load Temporary Add-on…** and select `browser-extension/manifest-firefox.json`.
+3. In the OpenDownloader app, open **Settings → Browser Integration** and click **Install** for your browser to activate Native Messaging.
 
 ---
 
-## 🚀 Features
+## 🛠️ Building From Source
 
-**Downloading**
-- **Dynamic segmentation** (1–32 connections): a free connection takes over half of whatever would finish
-  last, so no connection idles while another crawls. Crash-safe resume, self-healing connections and
-  automatic link refresh. See [the engine](#-the-engine).
-- A global speed limit, per-download connections and a per-server connection cap.
-- Queue with concurrency limit, scheduler, retry-all-failed and finish actions (shutdown / sleep / hibernate).
-- Smart names from the server or the video title; safe auto-rename or overwrite; optional SHA-256 check.
-- HLS and DASH streams (live recording, AES-128), video + audio merged with FFmpeg.
-
-**Video sites**
-- YouTube and 1,000+ sites through the app's own **yt-dlp**, kept up to date automatically — 1080p, 4K
-  and merged audio + video. A portable JavaScript runtime installs in one click.
-- Facebook / Instagram reels, Vimeo, Bilibili and generic players detected from the page itself.
-
-**Browser extension (Chrome, Edge, Brave, Firefox)**
-- Catches videos from network traffic, manifests and page data — HLS, DASH, MP4/WebM, subtitles.
-- *Download this video* bar on players, quality menus with sizes, right-click *Download all links*.
-- Works **without the app**: downloads, joins and saves videos in the browser.
-- **IDM-style hand-off.** A browser download is *paused*, handed to the app, and resumed in the browser
-  if the app can't take it, so nothing is lost. Form (POST) downloads, the browser's own request headers,
-  its proxy and the server it used all go along. Hold **Alt** while clicking to keep a download in the
-  browser.
-- **A live connection to the app.** Capture settings (file types, excluded sites, minimum size) are
-  edited in the app and pushed to the browser, with notifications when downloads finish. Site rules
-  update from the project without a new extension release.
-- **Safety net.** YouTube runs the app's own engine or yt-dlp first (your choice in Settings), and the
-  other one takes over if it fails. A file the server refuses to the app is fetched inside the open
-  page instead. A video the app can't get is downloaded in the browser.
-
-**App**
-- System / Dark / Light themes, status sidebar, search, sortable and resizable columns, bulk actions.
-- File names in any script (Bangla, Arabic, CJK …) with proper Indic shaping.
-- Clipboard detection, notifications, tray icon, antivirus hook, and a CLI that shares the same queue.
-
----
-
-## ⚡ The engine
-
-The download engine is a separate, reusable Rust crate,
-[`crates/opendownloader-engine`](crates/opendownloader-engine). Use it to make your own downloader fast
-too (MIT).
-
-- **Work stealing.** When a connection finishes, it splits the part that will finish last, in
-  proportion to the measured speeds. A slow connection never holds the whole download back, and very
-  slow ones are reopened.
-- **The first request is the probe.** Downloading starts at once; more connections join as soon as the
-  server shows it supports ranges.
-- **One pre-allocated file.** There is no joining of parts at the end, so bytes are not copied a second
-  time.
-- **Crash-safe resume.** A journal of the missing ranges is flushed every few seconds. A changed server
-  file (size, ETag, Last-Modified) is detected instead of being stitched onto old bytes.
-- **Self-healing.** HTTP 429/503 lowers the connection count, a per-IP connection limit is detected,
-  and cut or stalled connections resume where they stopped.
-- **Expired links.** A refused signed link is retried through its original URL, or re-resolved from
-  its page, keeping every byte already downloaded.
-- **Checks every reply.** A wrong `Content-Range`, a different size, or an HTML error page instead of
-  the file is caught before it can corrupt the download.
-- **ZIP preview.** `opendownloader peek <url>` lists what's inside a remote ZIP without downloading it.
-
-Measured on a home connection (100 MB, 8 connections) against 0.9.8: speedtest.belwue.net went from
-70.6 s to **21.4 s**, and mirror.nforce.com from 28.2 s to **19.7 s**.
-
-```rust
-let done = opendownloader_engine::Downloader::new(reqwest::Client::new())
-    .download(Job::new(url, "file.iso"), progress, control)
-    .await?;
-```
-
----
-
-## 📦 Install
-
-| Platform | Download | How |
-|---|---|---|
-| **Windows 10/11** | `OpenDownloader-0.9.10-windows-x64-portable.zip` | Extract and run `opendownloader.exe` — nothing to install. |
-| **macOS 12+** | `OpenDownloader-0.9.10-macos-Universal.zip` | Move *OpenDownloader.app* to Applications (development build, not notarized — right-click → Open the first time). |
-| **Ubuntu / Debian / Mint** | `opendownloader_0.9.10_amd64.deb` | `sudo apt install ./opendownloader_0.9.10_amd64.deb` |
-| **Fedora** | `opendownloader-0.9.10-1.x86_64.rpm` | `sudo dnf install ./opendownloader-0.9.10-1.x86_64.rpm` |
-| **Other Linux** | `OpenDownloader-0.9.10-x86_64.AppImage` | Make it executable and open it. |
-
-**Browser extension**
-1. **Chrome / Edge / Brave:** extract `OpenDownloader-Chrome-0.9.10.zip`, open `chrome://extensions`, turn on
-   *Developer mode*, choose **Load unpacked** and pick the `browser-extension` folder.
-2. **Firefox:** open `about:debugging#/runtime/this-firefox` → **Load Temporary Add-on…** → pick
-   `OpenDownloader-Firefox-0.9.10.xpi`.
-3. In the app, open **Settings → Browser Integration** and press **Install** for your browser, so the
-   extension can talk to the app. (Without it, the extension still downloads in the browser.)
-
-Your queue and settings live in `%APPDATA%\opendownloader` (Windows) and carry over between versions.
-
----
-
-## 🛠️ Build from source
-
-Prerequisites: [Rust stable](https://www.rust-lang.org/tools/install) (MSVC build tools on Windows).
+### Prerequisites
+- [Rust](https://www.rust-lang.org/tools/install) (1.75+ recommended, MSVC tools on Windows)
+- [Node.js](https://nodejs.org/) (for browser extension test suite)
 
 ```powershell
-cargo build --release   # target\release\opendownloader.exe (portable)
-cargo test --workspace  # app + engine crate: unit and local HTTP tests (no network needed)
-node --test browser-extension/*.test.js   # extension tests
+# 1. Clone the repository
+git clone https://github.com/Eaminx/OpenDownloader.git
+cd OpenDownloader
+
+# 2. Build the optimized release binary
+cargo build --release
+
+# 3. Run all tests
+cargo test --workspace
+
+# 4. Run browser extension tests
+cd browser-extension
+node --test *.test.js
 ```
 
-Packaging: `python scripts/package.py --platform windows --arch x64` (see [PORTABLE-BUILDS.md](PORTABLE-BUILDS.md)
-for macOS and Linux).
+### 💻 CLI Usage
+OpenDownloader shares its queue and settings between GUI and CLI:
+```powershell
+# Add a download
+opendownloader.exe add "https://example.com/file.zip"
 
-**Command line:** `opendownloader.exe add "https://example.com/file.zip"`,
-`opendownloader.exe get "https://example.com/file.zip" -o out.zip`,
-`opendownloader.exe peek "https://example.com/file.zip"`, `opendownloader.exe --help`.
+# Download directly in terminal
+opendownloader.exe get "https://example.com/file.zip" -o "out.zip"
+
+# Preview remote ZIP contents without downloading
+opendownloader.exe peek "https://example.com/archive.zip"
+```
 
 ---
 
-## 📄 License
+## 📜 License & Credits
 
-MIT — free for open-source, closed-source and commercial use. See [`LICENSE`](LICENSE);
-[`NOTICE.md`](NOTICE.md) lists the bundled third-party assets (Material Icons, fonts).
-
-<div align="center"><sub>Screenshots use Blender Foundation open movies (CC BY) and public test streams.</sub></div>
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+All third-party fonts and components are documented in [`NOTICE.md`](NOTICE.md).
