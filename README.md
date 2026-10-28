@@ -21,18 +21,20 @@ Multi-connection dynamic acceleration, automated queue scheduling, YouTube and 1
 
 ---
 
-## 💡 About OpenDownloader
+## 💡 Motivation & The OpenDownloader Story
 
-**OpenDownloader** was inspired by an earlier open-source Rust download manager concept whose original repository was untracked/unmaintained. Recognizing the immense potential of a native, lightweight Rust alternative to proprietary tools like Internet Download Manager (IDM), **OpenDownloader** represents an upgraded, modernized, and standalone evolution.
+I previously came across an open-source Rust download manager concept (I don't recall the original author or repository), and while the idea was promising, I felt it had several shortcomings and was missing key features necessary for a true daily driver. 
 
-### 🌟 What's New & Upgraded in OpenDownloader
+To bridge those gaps and bring the concept to its full potential, I built **OpenDownloader** — an upgraded, modernized, and feature-complete version packed with advanced enhancements:
 
-- **Dual Checksum Verification (MD5 + SHA-256):** Complete background streaming checksum verification supporting both 32-character MD5 and 64-character SHA-256 digests.
-- **Smart Clipboard Hash Detection:** Automatically sniffs MD5/SHA-256 hashes from your clipboard when adding or pasting URLs and prepares verification upfront.
-- **Audio Notifications & Chimes:** Integrated out-of-the-box audible feedback on download completion and error.
-- **Modernized Media & Category Auto-Routing:** Expanded auto-categorization covering modern formats (`.heic`, `.flv`, `.m2ts`, `.opus`, `.aac`, `.xlsx`, `.pptx`, `.csv`, `.apk`, `.deb`, `.iso`, `.dmg`, etc.) into dedicated organized subfolders.
-- **Browser Extension Right-Click Context Menus:** Right-click any link, video, or image directly in Chrome, Edge, Brave, or Firefox to download with OpenDownloader (full English & Bengali localization).
-- **Hardened Architecture & Clean Re-Crating:** Standalone reusable engine crate (`crates/opendownloader-engine`), 100% test pass rate across 176 Rust tests and 158 extension tests.
+### 🌟 What's New & Added in this Upgraded Version
+
+- **Dual Checksum Verification (MD5 + SHA-256):** Added background streaming integrity verification supporting both 32-character MD5 and 64-character SHA-256 digests.
+- **Smart Clipboard Hash Detection:** Automatically sniffs MD5/SHA-256 hashes from your clipboard when adding or pasting URLs and pre-configures verification.
+- **Audio Feedback & Chimes (Default ON):** Integrated native audible chime alerts on download completion and error for immediate feedback.
+- **Modernized Media & Category Auto-Routing:** Expanded smart auto-categorization covering modern extensions (`.heic`, `.flv`, `.m2ts`, `.opus`, `.aac`, `.xlsx`, `.pptx`, `.csv`, `.apk`, `.deb`, `.iso`, `.dmg`, etc.) into cleanly sorted category folders.
+- **Browser Extension Right-Click Context Menus:** Added instant right-click download support for images, videos, and links directly from Chromium and Firefox browsers (full English & Bengali localization).
+- **Polished Architecture & Engine Crate:** Reorganized into an independent, reusable engine crate (`crates/opendownloader-engine`), backed by 176 Rust tests and 158 browser extension tests.
 
 ---
 
